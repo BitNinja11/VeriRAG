@@ -1,0 +1,22 @@
+---
+title: HR Frequently Asked Questions
+date: 2024-06-10
+source_type: faq
+version: 2
+authority_note: Informal secondary source. Not maintained on a fixed schedule.
+---
+
+Q: How many leave days do I get?
+A: Full-time employees get 18 days of paid annual leave per year.
+
+Q: How many days can I carry forward?
+A: You can carry forward up to 5 unused days.
+
+Q: What are the office hours?
+A: Standard hours are 9:30 AM to 6:30 PM.
+
+Q: How long does expense reimbursement take?
+A: Expenses are reimbursed in the payroll cycle following submission.
+
+Q: Who approves leave?
+A: Your reporting manager approves all leave requests.

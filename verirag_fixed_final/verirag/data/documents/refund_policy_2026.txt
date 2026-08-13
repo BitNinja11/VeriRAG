@@ -1,0 +1,23 @@
+---
+title: Customer Refund Policy 2026
+date: 2026-02-01
+source_type: official_policy
+version: 3
+authority_note: Current policy. Replaces the 2024 refund policy.
+---
+
+SECTION 1. REFUND WINDOW
+
+Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. This policy replaces the previous refund
+policy dated March 2024.
+
+SECTION 2. CONDITIONS
+
+Refunds are issued to the original payment method. Processing takes 3 to 5
+business days.
+
+SECTION 3. EXCLUSIONS
+
+Enterprise licences sold under a negotiated contract are excluded from the
+standard refund window and are governed by the terms of that contract.

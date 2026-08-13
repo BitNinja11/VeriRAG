@@ -1,0 +1,32 @@
+digraph EvidenceGraph {
+  rankdir=TB;
+  node [shape=box];
+  "query" [label="How many paid annual leave days do full-time employees get?", style=filled, fillcolor="#4C78A8"];
+  "claim_0" [label="[0] HR Frequently Asked Questions\n18 days", style=filled, fillcolor="#E45756"];
+  "claim_1" [label="[1] Annual Leave Policy 2026\n24 days", style=filled, fillcolor="#54A24B"];
+  "claim_2" [label="[2] Annual Leave Policy 2023\n18 days", style=filled, fillcolor="#E45756"];
+  "claim_3" [label="[3] Employee Handbook\n24 days", style=filled, fillcolor="#72B7B2"];
+  "claim_4" [label="[4] Northwind Culture Blog - Perks Roundup\n35 days", style=filled, fillcolor="#E45756"];
+  "adjudication" [label="ADJUDICATOR\nexplicit supersession", style=filled, fillcolor="#B279A2"];
+  "answer" [label="FINAL ANSWER", style=filled, fillcolor="#54A24B"];
+  "query" -> "claim_0" [label="DERIVED_FROM", color="#9C9C9C"];
+  "query" -> "claim_1" [label="DERIVED_FROM", color="#9C9C9C"];
+  "query" -> "claim_2" [label="DERIVED_FROM", color="#9C9C9C"];
+  "query" -> "claim_3" [label="DERIVED_FROM", color="#9C9C9C"];
+  "query" -> "claim_4" [label="DERIVED_FROM", color="#9C9C9C"];
+  "claim_0" -> "claim_1" [label="CONTRADICTION", color="#E45756"];
+  "claim_0" -> "claim_2" [label="SUPPORT", color="#54A24B"];
+  "claim_0" -> "claim_3" [label="CONTRADICTION", color="#E45756"];
+  "claim_0" -> "claim_4" [label="CONTRADICTION", color="#E45756"];
+  "claim_0" -> "adjudication" [label="DERIVED_FROM", color="#9C9C9C"];
+  "claim_1" -> "claim_2" [label="CONTRADICTION", color="#E45756"];
+  "claim_1" -> "claim_3" [label="SUPPORT", color="#54A24B"];
+  "claim_1" -> "claim_4" [label="CONTRADICTION", color="#E45756"];
+  "claim_1" -> "adjudication" [label="DERIVED_FROM", color="#9C9C9C"];
+  "claim_2" -> "claim_3" [label="CONTRADICTION", color="#E45756"];
+  "claim_2" -> "claim_4" [label="CONTRADICTION", color="#E45756"];
+  "claim_2" -> "adjudication" [label="DERIVED_FROM", color="#9C9C9C"];
+  "claim_3" -> "claim_4" [label="CONTRADICTION", color="#E45756"];
+  "claim_4" -> "adjudication" [label="DERIVED_FROM", color="#9C9C9C"];
+  "adjudication" -> "answer" [label="SELECTED", color="#54A24B"];
+}

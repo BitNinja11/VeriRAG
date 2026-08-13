@@ -1,0 +1,27 @@
+---
+title: Information Security Policy 2026
+date: 2026-01-10
+source_type: regulation
+version: 2
+authority_note: Mandatory compliance document.
+---
+
+SECTION 1. PASSWORD REQUIREMENTS
+
+Passwords must be at least 14 characters and must be rotated every 180 days.
+Reuse of the previous 10 passwords is prohibited.
+
+SECTION 2. DEVICE ENCRYPTION
+
+All company issued laptops must have full disk encryption enabled. Personal
+devices used for company work must be enrolled in mobile device management.
+
+SECTION 3. INCIDENT REPORTING
+
+Suspected security incidents must be reported to the security team within
+4 hours of discovery.
+
+SECTION 4. ACCESS REVIEW
+
+Access to production systems is reviewed quarterly. Access not used for
+90 consecutive days is automatically revoked.

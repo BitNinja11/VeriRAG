@@ -1,0 +1,32 @@
+---
+title: Annual Leave Policy 2023
+date: 2023-01-01
+source_type: official_policy
+version: 1
+authority_note: Superseded by the 2026 revision.
+---
+
+SECTION 1. PURPOSE
+
+This policy defines paid annual leave entitlements for staff of Northwind
+Systems Private Limited for the calendar year 2023.
+
+SECTION 2. ENTITLEMENT
+
+Full-time employees are entitled to 18 days of paid annual leave every
+calendar year. Leave accrues at 1.5 days per completed month of service.
+
+SECTION 3. CARRY FORWARD
+
+A maximum of 5 unused leave days may be carried forward into the next
+calendar year. Days beyond this limit lapse on 31 December.
+
+SECTION 4. INTERNS
+
+Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement.
+
+SECTION 5. APPROVAL
+
+All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies.

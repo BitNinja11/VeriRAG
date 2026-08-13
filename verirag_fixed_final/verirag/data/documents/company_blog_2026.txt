@@ -1,0 +1,24 @@
+---
+title: Northwind Culture Blog - Perks Roundup
+date: 2026-05-20
+source_type: blog
+version: 1
+authority_note: Marketing content. Not an authoritative policy source.
+---
+
+WHAT MAKES NORTHWIND A GREAT PLACE TO WORK
+
+We asked the team what they love most about working here, and the answers
+were not surprising.
+
+Time off came up again and again. Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. We believe rest
+produces better engineering.
+
+Remote work is another favourite. The team works from wherever they are most
+productive, with almost no restrictions.
+
+Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell.
+
+We are hiring across engineering, design, and customer success.
