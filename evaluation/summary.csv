@@ -1,0 +1,6 @@
+system,n,answer_accuracy,answer_accuracy_ci,abstention_recall,false_abstention_rate,conflict_accuracy,conflict_recall,conflict_precision,citation_accuracy,primary_citation_accuracy,retrieval_hit_rate,hallucination_rate,adjudicator_invocation_rate,mean_llm_calls,mean_latency,provider,model,embedder_backend,reranker_backend
+vanilla_rag,32,0.46875,"[0.312, 0.656]",0.0,0.0,0.5,0.0,,0.5555555555555556,0.5555555555555556,1.0,0.25,0.0,0.0,0.0019375000000000013,offline,offline-deterministic,tfidf-svd,lexical
+verirag,32,1.0,"[0.893, 1.000]",1.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.5,0.0,0.003218750000000002,offline,offline-deterministic,tfidf-svd,lexical
+no_rerank,32,0.96875,"[0.906, 1.000]",1.0,0.0,1.0,1.0,1.0,0.9629629629629629,0.9629629629629629,0.9629629629629629,0.03125,0.5,0.0,0.0030000000000000014,offline,offline-deterministic,tfidf-svd,lexical
+no_adjudicator,32,0.71875,"[0.562, 0.875]",1.0,0.0,1.0,1.0,1.0,0.6666666666666666,0.5925925925925926,1.0,0.1875,0.0,0.0,0.0030312500000000014,offline,offline-deterministic,tfidf-svd,lexical
+recency_only,32,0.71875,"[0.562, 0.875]",1.0,0.0,1.0,1.0,1.0,0.8888888888888888,0.5555555555555556,1.0,0.28125,0.5,0.0,0.0030000000000000014,offline,offline-deterministic,tfidf-svd,lexical

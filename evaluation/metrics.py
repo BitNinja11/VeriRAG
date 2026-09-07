@@ -300,6 +300,65 @@ def score_item(
     }
 
 
+def bootstrap_ci(
+    values: list, confidence: float = 0.95, n_boot: int = 10000, seed: int = 42
+) -> tuple[float, float] | None:
+    """Percentile bootstrap confidence interval for a mean.
+
+    Exists because n=32 is small and a bare "1.000" hides that. Resampling the
+    per-item scores with replacement and reading the 2.5th/97.5th percentiles
+    of the resampled means says how much of the headline number is the system
+    and how much is the sample size. On 32 items a perfect score still only
+    supports a lower bound near 0.89, and stating that is more honest -- and
+    more persuasive -- than the point estimate alone.
+
+    Deterministic: the seed is fixed so a rerun reproduces the same interval.
+    """
+    clean = [
+        1.0 if v is True else (0.0 if v is False else float(v))
+        for v in values
+        if v is not None
+    ]
+    if not clean:
+        return None
+    if len(set(clean)) == 1:
+        # Degenerate sample: every resample is identical, so the bootstrap
+        # interval collapses to the point. Fall back to a Wilson-style bound
+        # for the all-0/all-1 proportion case, which is the honest answer.
+        import math
+
+        n, p_hat = len(clean), clean[0]
+        if p_hat in (0.0, 1.0):
+            z = 1.959963985
+            denom = 1 + z * z / n
+            centre = (p_hat + z * z / (2 * n)) / denom
+            half = (
+                z
+                * math.sqrt(p_hat * (1 - p_hat) / n + z * z / (4 * n * n))
+                / denom
+            )
+            return (max(0.0, centre - half), min(1.0, centre + half))
+        return (p_hat, p_hat)
+
+    import random
+
+    rng = random.Random(seed)
+    n = len(clean)
+    means = sorted(
+        sum(rng.choices(clean, k=n)) / n for _ in range(n_boot)
+    )
+    alpha = (1.0 - confidence) / 2.0
+    lo = means[int(alpha * n_boot)]
+    hi = means[min(n_boot - 1, int((1 - alpha) * n_boot))]
+    return (lo, hi)
+
+
+def _fmt_ci(ci: tuple[float, float] | None) -> str | None:
+    if ci is None:
+        return None
+    return f"[{ci[0]:.3f}, {ci[1]:.3f}]"
+
+
 def _mean(values: list) -> float | None:
     clean = [v for v in values if v is not None]
     if not clean:
@@ -326,9 +385,9 @@ def aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "n": len(rows),
         "answer_accuracy": _mean([r["answer_correct"] for r in rows]),
-        # Retained for backwards compatibility; this is decision accuracy over
-        # both answerable and unanswerable questions, not abstention recall.
-        "abstention_accuracy": _mean([r["abstention_correct"] for r in rows]),
+        "answer_accuracy_ci": _fmt_ci(
+            bootstrap_ci([r["answer_correct"] for r in rows])
+        ),
         "abstention_recall": _mean([r["abstained"] for r in abstain_items]),
         "false_abstention_rate": _mean([r["abstained"] for r in answerable_items]),
         "conflict_accuracy": _mean([r["conflict_correct"] for r in rows]),

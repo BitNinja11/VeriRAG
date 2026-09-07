@@ -332,3 +332,74 @@ The main remaining weakness is external validity, not the repaired benchmark:
 
 The next meaningful improvement is therefore **external evaluation**, not more
 rules added to make this same 32-question benchmark even easier.
+
+---
+
+# Round 2 audit (repository cleanup and reproducibility)
+
+## 11. The BM25 "fallback" was not equivalent
+
+The previous version shipped a hand-written BM25-Okapi implementation used
+whenever `rank_bm25` was unavailable, described as a drop-in fallback.
+
+Measured on this corpus, it is not. For `How many paid annual leave days do
+full-time employees get?`:
+
+```
+rank_bm25 top-5 : [7, 2, 9, 12, 8]
+fallback  top-5 : [7, 9, 2, 12, 8]
+```
+
+Chunks 2 and 9 swap. That ordering difference survives RRF fusion and
+reranking and flips one benchmark item, which is why the no-reranker ablation
+previously reported an exact 1.000 tie with the full pipeline. Under
+`rank_bm25` the reranker shows a small but real effect (1.000 vs 0.969, with
+the contradictory split at 0.875).
+
+**Fix:** the hand-written fallback is deleted and `rank_bm25` is a hard
+dependency. A fallback that silently changes published numbers is worse than a
+missing dependency.
+
+## 12. Results did not record the backend that produced them
+
+Retrieval results are backend-dependent (see above), but `summary.csv` recorded
+only scores. A reader could not tell whether a row came from
+sentence-transformers or the TF-IDF fallback.
+
+**Fix:** every summary row is stamped with `provider`, `model`,
+`embedder_backend` and `reranker_backend`, and the evaluator prints a loud
+warning when the transformer stack is missing.
+
+## 13. No uncertainty on any reported number
+
+Every headline was a bare point estimate on n=32.
+
+**Fix:** percentile bootstrap 95% CIs (10k resamples, fixed seed), with a
+Wilson interval for degenerate all-correct samples. A perfect score on 32 items
+reports as `1.000 [0.893, 1.000]`.
+
+## 14. The strongest baseline was missing
+
+Vanilla RAG is dense-only with no conflict handling — a weak control. The
+obvious objection to the whole architecture is "why not one strong LLM call
+over the same passages with a conflict-aware prompt?", and nothing in the repo
+answered it.
+
+**Fix:** `pipeline/strong_baseline.py` implements that baseline generously
+(same retrieval, same reranked top-5, full source metadata, same priority order
+in the prompt). It requires a real provider and is not yet run; the README
+states this as an open experiment rather than implying it was tested.
+
+## 15. Dead surface area removed
+
+- hand-written `_FallbackBM25` (~50 lines) — deleted, see §11
+- `weighted` fusion mode — configurable, never used, never ablated
+- `build_graph()` — returned a topology dict nothing consumed
+- `abstention_accuracy` — superseded metric kept "for compatibility" with
+  nothing
+
+## 16. Packaging
+
+Repository flattened from `verirag_fixed_final/verirag/` to the root; added
+`LICENSE`, `pyproject.toml`, `.gitignore`, and a GitHub Actions workflow that
+runs the regression suite and the offline benchmark on core dependencies only.

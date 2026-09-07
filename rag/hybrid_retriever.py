@@ -1,15 +1,10 @@
 """Hybrid retrieval: dense + BM25, fused into a single ranking.
 
-Two fusion strategies are implemented so the ablation study can compare them:
-
-  rrf       Reciprocal Rank Fusion. Uses only ranks, so the two score
-            distributions never need to be made commensurable. Robust default.
-
-  weighted  Min-max normalise each score list, then linearly combine. Simple
-            and interpretable, but sensitive to score distribution shape --
-            one outlier compresses everything else toward zero.
-
-Both are heuristics. Neither is "the correct" fusion method.
+Fusion is Reciprocal Rank Fusion: it uses only ranks, so the dense cosine
+scores and the BM25 scores never need to be made commensurable. A weighted
+min-max variant was implemented and then removed -- it was configurable, never
+used, and never ablated, so it was dead surface area pretending to be a
+feature. RRF is a heuristic, not "the correct" fusion method.
 """
 
 from __future__ import annotations
@@ -40,15 +35,6 @@ class RetrievedChunk:
         return "bm25"
 
 
-def _minmax(values: list[float]) -> list[float]:
-    if not values:
-        return []
-    lo, hi = min(values), max(values)
-    if hi - lo < 1e-12:
-        return [1.0] * len(values)
-    return [(v - lo) / (hi - lo) for v in values]
-
-
 class HybridRetriever:
     def __init__(
         self,
@@ -57,20 +43,14 @@ class HybridRetriever:
         dense_top_k: int = 10,
         bm25_top_k: int = 10,
         hybrid_top_k: int = 10,
-        fusion: str = "rrf",
         rrf_k: int = 60,
-        dense_weight: float = 0.6,
-        bm25_weight: float = 0.4,
     ):
         self.chunks = chunks
         self.embedder = embedder
         self.dense_top_k = dense_top_k
         self.bm25_top_k = bm25_top_k
         self.hybrid_top_k = hybrid_top_k
-        self.fusion = fusion
         self.rrf_k = rrf_k
-        self.dense_weight = dense_weight
-        self.bm25_weight = bm25_weight
 
         texts = [c.text for c in chunks]
         vectors = embedder.fit(texts)
@@ -99,27 +79,14 @@ class HybridRetriever:
         if not candidates:
             return []
 
-        if self.fusion == "weighted":
-            ordered = sorted(candidates)
-            d_norm = dict(
-                zip(ordered, _minmax([dense_raw.get(i, 0.0) for i in ordered]))
-            )
-            b_norm = dict(
-                zip(ordered, _minmax([bm25_raw.get(i, 0.0) for i in ordered]))
-            )
-            fused = {
-                i: self.dense_weight * d_norm[i] + self.bm25_weight * b_norm[i]
-                for i in ordered
-            }
-        else:
-            fused = {}
-            for idx in candidates:
-                score = 0.0
-                if idx in dense_rank:
-                    score += 1.0 / (self.rrf_k + dense_rank[idx] + 1)
-                if idx in bm25_rank:
-                    score += 1.0 / (self.rrf_k + bm25_rank[idx] + 1)
-                fused[idx] = score
+        fused = {}
+        for idx in candidates:
+            score = 0.0
+            if idx in dense_rank:
+                score += 1.0 / (self.rrf_k + dense_rank[idx] + 1)
+            if idx in bm25_rank:
+                score += 1.0 / (self.rrf_k + bm25_rank[idx] + 1)
+            fused[idx] = score
 
         ranked = sorted(fused.items(), key=lambda x: -x[1])[:top_k]
 

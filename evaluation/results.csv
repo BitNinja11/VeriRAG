@@ -1,0 +1,264 @@
+id,category,question,answer,answer_correct,expect_abstain,abstained,abstention_correct,expected_conflict,detected_conflict,conflict_correct,citation_correct,primary_citation_correct,retrieval_hit,hallucinated_value,adjudicator_invoked,llm_calls,latency,system
+clean-01,clean,How many paid leave days are interns entitled to?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.004,vanilla_rag
+clean-02,clean,What is the minimum password length?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+clean-03,clean,How often must passwords be rotated?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+clean-04,clean,Within how many hours must a suspected security incident be reported?,"Suspected security incidents must be reported to the security team within
+4 hours of discovery. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+clean-05,clean,After how many days of no use is production access automatically revoked?,"Access not used for
+90 consecutive days is automatically revoked. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.001,vanilla_rag
+clean-06,clean,How many days in advance must leave be approved by a manager?,"All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+clean-07,clean,How many days per month may employees work remotely?,REMOTE WORK Employees may work remotely up to 8 days per month with manager approval. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+clean-08,clean,Within how many days must business expenses be submitted?,Business expenses must be submitted within 30 days of being incurred. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+contra-01,contradictory,How many paid annual leave days do full-time employees get?,A: Full-time employees get 18 days of paid annual leave per year. [0],False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+contra-02,contradictory,What is the refund window for a software licence?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+contra-03,contradictory,How much annual leave does the company offer its people?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [0]",False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+contra-04,contradictory,How long do customers have to request a refund on a licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [0]",True,False,False,True,True,False,False,True,True,True,False,False,0,0.002,vanilla_rag
+contra-05,contradictory,What is the paid annual leave entitlement according to company policy?,"This policy defines paid annual leave entitlements for all staff of Northwind
+Systems Private Limited with effect from 1 January 2026. [0]",False,False,False,True,True,False,False,True,True,True,False,False,0,0.002,vanilla_rag
+contra-06,contradictory,How many days of annual leave is a full-time staff member given each year?,Full-time staff get 24 days of paid annual leave each year. [0],True,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+contra-07,contradictory,What refund period applies to a standard licence purchase?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+contra-08,contradictory,How many leave days does an employee accrue per month?,A: Full-time employees get 18 days of paid annual leave per year. [0],False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+outdated-01,outdated,How many unused leave days can be carried forward to the next year?,"A maximum of 5 unused leave days may be carried forward into the next
+calendar year. [0]",False,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+outdated-02,outdated,What is the current annual leave entitlement for full-time staff?,Full-time staff get 24 days of paid annual leave each year. [2],True,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+outdated-03,outdated,What is the current refund window in days?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,False,False,False,False,True,True,False,0,0.002,vanilla_rag
+outdated-04,outdated,How many days does refund processing take?,"Processing takes 3 to 5
+business days. [0]",True,False,False,True,True,False,False,True,True,True,False,False,0,0.001,vanilla_rag
+outdated-05,outdated,How many leave days can I carry over at the end of December?,A: You can carry forward up to 5 unused days. [0],False,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+outdated-06,outdated,"According to the latest policy, how much paid annual leave is granted?","This policy defines paid annual leave entitlements for all staff of Northwind
+Systems Private Limited with effect from 1 January 2026. [0]",False,False,False,True,True,False,False,True,True,True,False,False,0,0.002,vanilla_rag
+outdated-07,outdated,What is the maximum number of leave days carried into the following calendar year?,"A maximum of 5 unused leave days may be carried forward into the next
+calendar year. [0]",False,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+outdated-08,outdated,How long is the refund window for a licence bought today?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [2]",False,False,False,True,True,False,False,False,False,True,False,False,0,0.002,vanilla_rag
+noisy-01,noisy,What is the parking waiting list length?,"The waiting
+list is currently approximately three weeks. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.001,vanilla_rag
+noisy-02,noisy,How far in advance must visitors be registered?,All visitors must be registered at reception at least one day in advance. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.002,vanilla_rag
+noisy-03,noisy,What is the company's parental leave entitlement?,"This policy defines paid annual leave entitlements for staff of Northwind
+Systems Private Limited for the calendar year 2023. [1]",False,True,False,False,False,False,True,,,,False,False,0,0.002,vanilla_rag
+noisy-04,noisy,How many sick days are employees entitled to?,"Full-time employees are entitled to 18 days of paid annual leave every
+calendar year. [0]",False,True,False,False,False,False,True,,,,True,False,0,0.002,vanilla_rag
+noisy-05,noisy,What is the annual bonus percentage?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0]",False,True,False,False,False,False,True,,,,False,False,0,0.002,vanilla_rag
+noisy-06,noisy,On which day is building maintenance scheduled?,"The building undergoes scheduled maintenance on the first Saturday of every
+month. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.001,vanilla_rag
+noisy-07,noisy,What is the notice period for resignation?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0]",False,True,False,False,False,False,True,,,,False,False,0,0.002,vanilla_rag
+noisy-08,noisy,How many days of study leave are available?,A: Full-time employees get 18 days of paid annual leave per year. [0],False,True,False,False,False,False,True,,,,True,False,0,0.002,vanilla_rag
+clean-01,clean,How many paid leave days are interns entitled to?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.004,verirag
+clean-02,clean,What is the minimum password length?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+clean-03,clean,How often must passwords be rotated?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+clean-04,clean,Within how many hours must a suspected security incident be reported?,"Suspected security incidents must be reported to the security team within
+4 hours of discovery. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.004,verirag
+clean-05,clean,After how many days of no use is production access automatically revoked?,"Access not used for
+90 consecutive days is automatically revoked. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+clean-06,clean,How many days in advance must leave be approved by a manager?,"All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+clean-07,clean,How many days per month may employees work remotely?,REMOTE WORK Employees may work remotely up to 8 days per month with manager approval. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+clean-08,clean,Within how many days must business expenses be submitted?,Business expenses must be submitted within 30 days of being incurred. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+contra-01,contradictory,How many paid annual leave days do full-time employees get?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [1] Sources disagreed: HR Frequently Asked Questions states 18 days [0], Annual Leave Policy 2023 states 18 days [2], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.005,verirag
+contra-02,contradictory,What is the refund window for a software licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+contra-03,contradictory,How much annual leave does the company offer its people?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [1] Sources disagreed: Northwind Culture Blog - Perks Roundup states 35 days [0], Annual Leave Policy 2023 states 18 days [2], HR Frequently Asked Questions states 18 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.004,verirag
+contra-04,contradictory,How long do customers have to request a refund on a licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [0] Sources disagreed: Customer Refund Policy 2024 states 14 days [1], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+contra-05,contradictory,What is the paid annual leave entitlement according to company policy?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.004,verirag
+contra-06,contradictory,How many days of annual leave is a full-time staff member given each year?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [2] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [3], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+contra-07,contradictory,What refund period applies to a standard licence purchase?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+contra-08,contradictory,How many leave days does an employee accrue per month?,Leave accrues at 2 days per completed month of service. [2] Sources disagreed: Annual Leave Policy 2023 states 1.5 days [1]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.,True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-01,outdated,How many unused leave days can be carried forward to the next year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [2]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.004,verirag
+outdated-02,outdated,What is the current annual leave entitlement for full-time staff?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [3], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-03,outdated,What is the current refund window in days?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [3]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-04,outdated,How many days does refund processing take?,"Processing takes 3 to 5
+business days. [0] Sources disagreed: Customer Refund Policy 2024 states 5 to 7 business days [1]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-05,outdated,How many leave days can I carry over at the end of December?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [2] Sources disagreed: Annual Leave Policy 2023 states 5 days [1], HR Frequently Asked Questions states 5 days [3]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-06,outdated,"According to the latest policy, how much paid annual leave is granted?","Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-07,outdated,What is the maximum number of leave days carried into the following calendar year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+outdated-08,outdated,How long is the refund window for a licence bought today?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,verirag
+noisy-01,noisy,What is the parking waiting list length?,"The waiting
+list is currently approximately three weeks. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+noisy-02,noisy,How far in advance must visitors be registered?,All visitors must be registered at reception at least one day in advance. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+noisy-03,noisy,What is the company's parental leave entitlement?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,verirag
+noisy-04,noisy,How many sick days are employees entitled to?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,verirag
+noisy-05,noisy,What is the annual bonus percentage?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,verirag
+noisy-06,noisy,On which day is building maintenance scheduled?,"The building undergoes scheduled maintenance on the first Saturday of every
+month. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,verirag
+noisy-07,noisy,What is the notice period for resignation?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,verirag
+noisy-08,noisy,How many days of study leave are available?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,verirag
+clean-01,clean,How many paid leave days are interns entitled to?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0] This is corroborated by Annual Leave Policy 2026 [2].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-02,clean,What is the minimum password length?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-03,clean,How often must passwords be rotated?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-04,clean,Within how many hours must a suspected security incident be reported?,"Suspected security incidents must be reported to the security team within
+4 hours of discovery. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-05,clean,After how many days of no use is production access automatically revoked?,"Access not used for
+90 consecutive days is automatically revoked. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-06,clean,How many days in advance must leave be approved by a manager?,"All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-07,clean,How many days per month may employees work remotely?,REMOTE WORK Employees may work remotely up to 8 days per month with manager approval. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+clean-08,clean,Within how many days must business expenses be submitted?,Business expenses must be submitted within 30 days of being incurred. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+contra-01,contradictory,How many paid annual leave days do full-time employees get?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [3] Sources disagreed: HR Frequently Asked Questions states 18 days [0], Annual Leave Policy 2023 states 18 days [1], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-02,contradictory,What is the refund window for a software licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-03,contradictory,How much annual leave does the company offer its people?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [3] Sources disagreed: HR Frequently Asked Questions states 18 days [0], Northwind Culture Blog - Perks Roundup states 35 days [1], Annual Leave Policy 2023 states 18 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-04,contradictory,How long do customers have to request a refund on a licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [0] Sources disagreed: Customer Refund Policy 2024 states 14 days [1], Northwind Culture Blog - Perks Roundup states 90 days [3]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-05,contradictory,What is the paid annual leave entitlement according to company policy?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [3], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-06,contradictory,How many days of annual leave is a full-time staff member given each year?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [3] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [2], Northwind Culture Blog - Perks Roundup states 35 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-07,contradictory,What refund period applies to a standard licence purchase?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [4]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+contra-08,contradictory,How many leave days does an employee accrue per month?,Leave accrues at 1.5 days per completed month of service. [3] Sources disagreed: Employee Handbook states 2 days [1]. The system selected Annual Leave Policy 2023 on the basis of source authority.,False,False,False,True,True,True,True,False,False,False,True,True,0,0.003,no_rerank
+outdated-01,outdated,How many unused leave days can be carried forward to the next year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [2] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [1]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-02,outdated,What is the current annual leave entitlement for full-time staff?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 18 days [0], Northwind Culture Blog - Perks Roundup states 35 days [3], HR Frequently Asked Questions states 18 days [4]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-03,outdated,What is the current refund window in days?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [3]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-04,outdated,How many days does refund processing take?,"Processing takes 3 to 5
+business days. [0] Sources disagreed: Customer Refund Policy 2024 states 5 to 7 business days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-05,outdated,How many leave days can I carry over at the end of December?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [3] Sources disagreed: HR Frequently Asked Questions states 5 days [0], Annual Leave Policy 2023 states 5 days [2]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-06,outdated,"According to the latest policy, how much paid annual leave is granted?","Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] Sources disagreed: HR Frequently Asked Questions states 18 days [1], Annual Leave Policy 2023 states 18 days [2]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-07,outdated,What is the maximum number of leave days carried into the following calendar year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [2]. The system selected Annual Leave Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+outdated-08,outdated,How long is the refund window for a licence bought today?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [1] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Northwind Culture Blog - Perks Roundup states 90 days [2]. The system selected Customer Refund Policy 2026 on the basis of explicit supersession.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,no_rerank
+noisy-01,noisy,What is the parking waiting list length?,"The waiting
+list is currently approximately three weeks. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+noisy-02,noisy,How far in advance must visitors be registered?,All visitors must be registered at reception at least one day in advance. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+noisy-03,noisy,What is the company's parental leave entitlement?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_rerank
+noisy-04,noisy,How many sick days are employees entitled to?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_rerank
+noisy-05,noisy,What is the annual bonus percentage?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_rerank
+noisy-06,noisy,On which day is building maintenance scheduled?,"The building undergoes scheduled maintenance on the first Saturday of every
+month. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_rerank
+noisy-07,noisy,What is the notice period for resignation?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_rerank
+noisy-08,noisy,How many days of study leave are available?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_rerank
+clean-01,clean,How many paid leave days are interns entitled to?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-02,clean,What is the minimum password length?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-03,clean,How often must passwords be rotated?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-04,clean,Within how many hours must a suspected security incident be reported?,"Suspected security incidents must be reported to the security team within
+4 hours of discovery. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-05,clean,After how many days of no use is production access automatically revoked?,"Access not used for
+90 consecutive days is automatically revoked. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-06,clean,How many days in advance must leave be approved by a manager?,"All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-07,clean,How many days per month may employees work remotely?,REMOTE WORK Employees may work remotely up to 8 days per month with manager approval. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+clean-08,clean,Within how many days must business expenses be submitted?,Business expenses must be submitted within 30 days of being incurred. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+contra-01,contradictory,How many paid annual leave days do full-time employees get?,A: Full-time employees get 18 days of paid annual leave per year. [0] This is corroborated by Annual Leave Policy 2023 [2].,False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+contra-02,contradictory,What is the refund window for a software licence?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+contra-03,contradictory,How much annual leave does the company offer its people?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [0]",False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+contra-04,contradictory,How long do customers have to request a refund on a licence?,"Customers may request a full refund within 30 days of purchase for any
+Northwind Systems software licence. [0]",True,False,False,True,True,True,True,True,True,True,False,False,0,0.003,no_adjudicator
+contra-05,contradictory,What is the paid annual leave entitlement according to company policy?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] This is corroborated by Employee Handbook [2].",True,False,False,True,True,True,True,True,True,True,False,False,0,0.003,no_adjudicator
+contra-06,contradictory,How many days of annual leave is a full-time staff member given each year?,Full-time staff get 24 days of paid annual leave each year. [0] This is corroborated by Annual Leave Policy 2026 [2].,True,False,False,True,True,True,True,True,False,True,False,False,0,0.003,no_adjudicator
+contra-07,contradictory,What refund period applies to a standard licence purchase?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+contra-08,contradictory,How many leave days does an employee accrue per month?,"You accrue these
+days over the year at a rate of 2 days per month worked. [0] This is corroborated by Annual Leave Policy 2026 [2].",True,False,False,True,True,True,True,True,False,True,False,False,0,0.003,no_adjudicator
+outdated-01,outdated,How many unused leave days can be carried forward to the next year?,"A maximum of 5 unused leave days may be carried forward into the next
+calendar year. [0] This is corroborated by HR Frequently Asked Questions [2].",False,False,False,True,True,True,True,False,False,True,False,False,0,0.003,no_adjudicator
+outdated-02,outdated,What is the current annual leave entitlement for full-time staff?,"Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] This is corroborated by Employee Handbook [2].",True,False,False,True,True,True,True,True,True,True,False,False,0,0.003,no_adjudicator
+outdated-03,outdated,What is the current refund window in days?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+outdated-04,outdated,How many days does refund processing take?,"Processing takes 3 to 5
+business days. [0]",True,False,False,True,True,True,True,True,True,True,False,False,0,0.003,no_adjudicator
+outdated-05,outdated,How many leave days can I carry over at the end of December?,"A maximum of 5 unused leave days may be carried forward into the next
+calendar year. [1] This is corroborated by HR Frequently Asked Questions [3].",False,False,False,True,True,True,True,False,False,True,False,False,0,0.004,no_adjudicator
+outdated-06,outdated,"According to the latest policy, how much paid annual leave is granted?","Full-time employees are entitled to 24 days of paid annual leave every
+calendar year. [0] This is corroborated by Employee Handbook [2].",True,False,False,True,True,True,True,True,True,True,False,False,0,0.003,no_adjudicator
+outdated-07,outdated,What is the maximum number of leave days carried into the following calendar year?,"A maximum of 5 unused leave days may be carried forward into the next
+calendar year. [0] This is corroborated by HR Frequently Asked Questions [4].",False,False,False,True,True,True,True,False,False,True,False,False,0,0.003,no_adjudicator
+outdated-08,outdated,How long is the refund window for a licence bought today?,"Customers may request a full refund within 14 days of purchase for any
+Northwind Systems software licence. [0]",False,False,False,True,True,True,True,False,False,True,True,False,0,0.003,no_adjudicator
+noisy-01,noisy,What is the parking waiting list length?,"The waiting
+list is currently approximately three weeks. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+noisy-02,noisy,How far in advance must visitors be registered?,All visitors must be registered at reception at least one day in advance. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+noisy-03,noisy,What is the company's parental leave entitlement?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_adjudicator
+noisy-04,noisy,How many sick days are employees entitled to?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_adjudicator
+noisy-05,noisy,What is the annual bonus percentage?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_adjudicator
+noisy-06,noisy,On which day is building maintenance scheduled?,"The building undergoes scheduled maintenance on the first Saturday of every
+month. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,no_adjudicator
+noisy-07,noisy,What is the notice period for resignation?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_adjudicator
+noisy-08,noisy,How many days of study leave are available?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,no_adjudicator
+clean-01,clean,How many paid leave days are interns entitled to?,"Interns engaged for a period of six months or less are entitled to 12 days
+of paid leave, prorated by duration of engagement. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-02,clean,What is the minimum password length?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-03,clean,How often must passwords be rotated?,Passwords must be at least 14 characters and must be rotated every 180 days. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-04,clean,Within how many hours must a suspected security incident be reported?,"Suspected security incidents must be reported to the security team within
+4 hours of discovery. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-05,clean,After how many days of no use is production access automatically revoked?,"Access not used for
+90 consecutive days is automatically revoked. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-06,clean,How many days in advance must leave be approved by a manager?,"All leave must be approved by the reporting manager at least 7 working days
+in advance, except in the case of medical emergencies. [0] This is corroborated by Annual Leave Policy 2026 [1].",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-07,clean,How many days per month may employees work remotely?,REMOTE WORK Employees may work remotely up to 8 days per month with manager approval. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+clean-08,clean,Within how many days must business expenses be submitted?,Business expenses must be submitted within 30 days of being incurred. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+contra-01,contradictory,How many paid annual leave days do full-time employees get?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [4] Sources disagreed: HR Frequently Asked Questions states 18 days [0], Annual Leave Policy 2026 states 24 days [1], Annual Leave Policy 2023 states 18 days [2], Employee Handbook states 24 days [3]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-02,contradictory,What is the refund window for a software licence?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [2] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Customer Refund Policy 2026 states 30 days [1]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-03,contradictory,How much annual leave does the company offer its people?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [0] Sources disagreed: Annual Leave Policy 2026 states 24 days [1], Annual Leave Policy 2023 states 18 days [2], HR Frequently Asked Questions states 18 days [4]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-04,contradictory,How long do customers have to request a refund on a licence?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [2] Sources disagreed: Customer Refund Policy 2026 states 30 days [0], Customer Refund Policy 2024 states 14 days [1]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-05,contradictory,What is the paid annual leave entitlement according to company policy?,"Full-time staff get 24 days of paid annual leave each year. [2] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [4]. The system selected Employee Handbook on the basis of recency only.",True,False,False,True,True,True,True,False,False,True,False,True,0,0.003,recency_only
+contra-06,contradictory,How many days of annual leave is a full-time staff member given each year?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [4] Sources disagreed: Employee Handbook states 24 days [0], Annual Leave Policy 2023 states 18 days [1], Annual Leave Policy 2026 states 24 days [2], HR Frequently Asked Questions states 18 days [3]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-07,contradictory,What refund period applies to a standard licence purchase?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [2] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Customer Refund Policy 2026 states 30 days [1]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+contra-08,contradictory,How many leave days does an employee accrue per month?,"You accrue these
+days over the year at a rate of 2 days per month worked. [0] Sources disagreed: Annual Leave Policy 2023 states 1.5 days [1]. The system selected Employee Handbook on the basis of recency only.",True,False,False,True,True,True,True,False,False,True,False,True,0,0.003,recency_only
+outdated-01,outdated,How many unused leave days can be carried forward to the next year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [2]. The system selected Annual Leave Policy 2026 on the basis of recency only.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,recency_only
+outdated-02,outdated,What is the current annual leave entitlement for full-time staff?,"Our people enjoy a generous 35 days of
+annual leave, which is well above the industry average. [4] Sources disagreed: Annual Leave Policy 2026 states 24 days [0], Annual Leave Policy 2023 states 18 days [1], Employee Handbook states 24 days [2], HR Frequently Asked Questions states 18 days [3]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+outdated-03,outdated,What is the current refund window in days?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [3] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Customer Refund Policy 2026 states 30 days [1]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+outdated-04,outdated,How many days does refund processing take?,"Processing takes 3 to 5
+business days. [0] Sources disagreed: Customer Refund Policy 2024 states 5 to 7 business days [1]. The system selected Customer Refund Policy 2026 on the basis of recency only.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,recency_only
+outdated-05,outdated,How many leave days can I carry over at the end of December?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [2] Sources disagreed: Annual Leave Policy 2023 states 5 days [1], HR Frequently Asked Questions states 5 days [3]. The system selected Annual Leave Policy 2026 on the basis of recency only.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,recency_only
+outdated-06,outdated,"According to the latest policy, how much paid annual leave is granted?","Full-time staff get 24 days of paid annual leave each year. [2] Sources disagreed: Annual Leave Policy 2023 states 18 days [1], HR Frequently Asked Questions states 18 days [4]. The system selected Employee Handbook on the basis of recency only.",True,False,False,True,True,True,True,False,False,True,False,True,0,0.003,recency_only
+outdated-07,outdated,What is the maximum number of leave days carried into the following calendar year?,"A maximum of 10 unused leave days may be carried forward into the next
+calendar year. [1] Sources disagreed: Annual Leave Policy 2023 states 5 days [0], HR Frequently Asked Questions states 5 days [4]. The system selected Annual Leave Policy 2026 on the basis of recency only.",True,False,False,True,True,True,True,True,True,True,False,True,0,0.003,recency_only
+outdated-08,outdated,How long is the refund window for a licence bought today?,"Our refund promise for customers is famously generous too, with a full
+90 day no-questions-asked window on every licence we sell. [2] Sources disagreed: Customer Refund Policy 2024 states 14 days [0], Customer Refund Policy 2026 states 30 days [1]. The system selected Northwind Culture Blog - Perks Roundup on the basis of recency only.",False,False,False,True,True,True,True,True,False,True,True,True,0,0.003,recency_only
+noisy-01,noisy,What is the parking waiting list length?,"The waiting
+list is currently approximately three weeks. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+noisy-02,noisy,How far in advance must visitors be registered?,All visitors must be registered at reception at least one day in advance. [0],True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+noisy-03,noisy,What is the company's parental leave entitlement?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,recency_only
+noisy-04,noisy,How many sick days are employees entitled to?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,recency_only
+noisy-05,noisy,What is the annual bonus percentage?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,recency_only
+noisy-06,noisy,On which day is building maintenance scheduled?,"The building undergoes scheduled maintenance on the first Saturday of every
+month. [0]",True,False,False,True,False,False,True,True,True,True,False,False,0,0.003,recency_only
+noisy-07,noisy,What is the notice period for resignation?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,recency_only
+noisy-08,noisy,How many days of study leave are available?,The retrieved documents do not contain enough information to answer this question.,True,True,True,True,False,False,True,,,,False,False,0,0.003,recency_only

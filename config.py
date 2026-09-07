@@ -80,12 +80,9 @@ RERANK_TOP_K = int(os.getenv("VERIRAG_RERANK_TOP_K", "5"))
 # baseline is not penalised simply for seeing one fewer passage.
 VANILLA_TOP_K = int(os.getenv("VERIRAG_VANILLA_TOP_K", "5"))
 
-# Hybrid fusion. "rrf" = Reciprocal Rank Fusion (rank-based, scale-free).
-# "weighted" = min-max normalise each score list then linearly combine.
-FUSION_METHOD = os.getenv("VERIRAG_FUSION", "rrf").lower()
+# Reciprocal Rank Fusion constant. Rank-based and scale-free, so the dense
+# cosine scores and BM25 scores never have to be made commensurable.
 RRF_K = int(os.getenv("VERIRAG_RRF_K", "60"))
-DENSE_WEIGHT = float(os.getenv("VERIRAG_DENSE_WEIGHT", "0.6"))
-BM25_WEIGHT = float(os.getenv("VERIRAG_BM25_WEIGHT", "0.4"))
 
 # --------------------------------------------------------------------------
 # Adjudication heuristic

@@ -12,9 +12,7 @@ can report how often the expensive path actually fires.
 
 This is implemented as an explicit state machine rather than with LangGraph.
 The graph has six nodes and one branch; hand-rolling it keeps the dependency
-list short and makes the control flow readable in one screen. `build_graph()`
-exposes the topology for visualisation, and swapping in LangGraph later means
-re-wiring the same node functions.
+list short and makes the control flow readable in one screen.
 """
 
 from __future__ import annotations
@@ -79,19 +77,6 @@ class VeriRAGState:
         }
 
 
-def build_graph() -> dict[str, list[str]]:
-    """Workflow topology, exposed for documentation and visualisation."""
-    return {
-        "START": ["retrieve"],
-        "retrieve": ["rerank"],
-        "rerank": ["extract_evidence"],
-        "extract_evidence": ["detect_conflict"],
-        "detect_conflict": ["adjudicate", "generate"],  # conditional branch
-        "adjudicate": ["generate"],
-        "generate": ["END"],
-    }
-
-
 class VeriRAG:
     def __init__(
         self,
@@ -115,10 +100,7 @@ class VeriRAG:
             dense_top_k=config.DENSE_TOP_K,
             bm25_top_k=config.BM25_TOP_K,
             hybrid_top_k=config.HYBRID_TOP_K,
-            fusion=config.FUSION_METHOD,
             rrf_k=config.RRF_K,
-            dense_weight=config.DENSE_WEIGHT,
-            bm25_weight=config.BM25_WEIGHT,
         )
         self.reranker = Reranker(config.RERANKER_MODEL)
 

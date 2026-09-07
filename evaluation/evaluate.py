@@ -38,6 +38,7 @@ from evaluation.metrics import (  # noqa: E402
     aggregate_by_category,
     score_item,
 )
+from pipeline.strong_baseline import StrongBaseline  # noqa: E402
 from pipeline.vanilla_rag import VanillaRAG  # noqa: E402
 from pipeline.verirag import VeriRAG  # noqa: E402
 
@@ -224,6 +225,7 @@ def _fmt(value) -> str:
 def print_summary(results: dict[str, list[dict]]) -> None:
     metrics = [
         ("answer_accuracy", "Answer accuracy"),
+        ("answer_accuracy_ci", "  95% CI (bootstrap)"),
         ("abstention_recall", "Abstention recall"),
         ("false_abstention_rate", "False-abstention rate"),
         ("conflict_accuracy", "Conflict-label accuracy"),
@@ -240,7 +242,7 @@ def print_summary(results: dict[str, list[dict]]) -> None:
     systems = list(results.keys())
     aggregates = {name: aggregate(rows) for name, rows in results.items()}
 
-    width = 26
+    width = 26  # noqa: PLR2004
     print("\n" + "=" * (width + 13 * len(systems)))
     print("OVERALL".ljust(width) + "".join(s[:12].rjust(13) for s in systems))
     print("=" * (width + 13 * len(systems)))
@@ -268,6 +270,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run the VeriRAG benchmark.")
     parser.add_argument("--provider", default=None, help="LLM provider override")
     parser.add_argument("--ablation", action="store_true", help="run ablations")
+    parser.add_argument(
+        "--strong-baseline",
+        action="store_true",
+        help="also run the single-call conflict-aware LLM baseline "
+             "(requires a real provider)",
+    )
     parser.add_argument("--limit", type=int, default=None, help="limit questions")
     args = parser.parse_args()
 
@@ -288,9 +296,14 @@ def main() -> None:
     )
     if verirag.embedder.is_degraded or verirag.reranker.is_degraded:
         print(
-            "  NOTE: running with degraded retrieval backends "
-            "(sentence-transformers unavailable). Treat these as a separate "
-            "backend condition, not as a guaranteed lower bound."
+            "\n  " + "!" * 68 + "\n"
+            "  WARNING: transformer backends unavailable; running degraded\n"
+            "  (embedder=%s, reranker=%s).\n"
+            "  Results from this configuration are NOT comparable to a run\n"
+            "  with sentence-transformers installed. The backend condition is\n"
+            "  recorded in summary.csv -- report it alongside any number.\n"
+            "  " % (verirag.embedder.backend, verirag.reranker.backend)
+            + "!" * 68
         )
 
     vanilla = VanillaRAG(verirag.retriever, client)
@@ -303,6 +316,19 @@ def main() -> None:
     print(f"\n--- verirag ({len(questions)} questions) ---")
     results["verirag"] = run_system(verirag, questions, "verirag")
 
+    if args.strong_baseline:
+        if client.is_offline:
+            print(
+                "\n[!] --strong-baseline needs a real provider "
+                "(e.g. --provider groq). Skipping it."
+            )
+        else:
+            print(f"\n--- strong_llm_baseline ({len(questions)} questions) ---")
+            strong = StrongBaseline(verirag.retriever, verirag.reranker, client)
+            results["strong_llm"] = run_system(
+                strong, questions, "strong_llm"
+            )
+
     if args.ablation:
         for mode in ("no_rerank", "no_adjudicator", "recency_only"):
             print(f"\n--- ablation: {mode} ---")
@@ -313,12 +339,27 @@ def main() -> None:
     all_rows = [row for rows in results.values() for row in rows]
     write_csv(config.RESULTS_PATH, all_rows)
 
+    # Stamp the backend condition onto every summary row. Retrieval results
+    # are backend-dependent -- the deterministic BM25 fallback this project
+    # used to ship ranked chunks differently from rank_bm25 and silently moved
+    # an ablation number -- so a results file that does not say which stack
+    # produced it is not reproducible. This makes the condition part of the
+    # artifact instead of a line in a terminal nobody kept.
+    condition = {
+        "provider": client.provider,
+        "model": client.model,
+        "embedder_backend": verirag.embedder.backend,
+        "reranker_backend": verirag.reranker.backend,
+    }
     summary_rows = []
     for name, rows in results.items():
         agg = aggregate(rows)
-        agg["system"] = name
         summary_rows.append(
-            {"system": name, **{k: v for k, v in agg.items() if k != "system"}}
+            {
+                "system": name,
+                **{k: v for k, v in agg.items() if k != "system"},
+                **condition,
+            }
         )
     write_csv(config.RESULTS_SUMMARY_PATH, summary_rows)
 
