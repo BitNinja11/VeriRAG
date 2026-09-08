@@ -439,3 +439,23 @@ The general lesson is the one this audit keeps rediscovering: a fallback that
 silently substitutes a different system is a measurement hazard, not just a
 robustness feature. See also §11, where a BM25 "drop-in fallback" silently
 changed a published ablation number.
+
+## 18. Missing User-Agent made every provider call fail behind Cloudflare
+
+`agents/llm.py` set only `Content-Type` and `Authorization` on outbound
+requests, so `urllib` supplied its default `User-Agent: Python-urllib/3.x`.
+Several providers sit behind Cloudflare, which blocks that fingerprint before
+the request reaches the API:
+
+```
+HTTP 403 from groq: error code: 1010
+```
+
+The body is plain text, not JSON, because no API ever saw the request. The
+failure is easy to misdiagnose as a bad key or a retired model. Combined with
+§17's silent fallback, the visible result was a clean 1.000 table.
+
+**Fix:** `_post` sets a `User-Agent` for every provider, overridable via
+`VERIRAG_USER_AGENT` so an alternative can be tried without editing code.
+Verified with the same request minus/plus the header: 403/1010 without, a real
+API response with.

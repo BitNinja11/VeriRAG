@@ -206,6 +206,20 @@ class LLMClient:
         import urllib.request
 
         data = json.dumps(payload).encode("utf-8")
+        # Identify the client explicitly. Left unset, urllib sends
+        # "User-Agent: Python-urllib/3.x", which Cloudflare -- sitting in front
+        # of several of these providers -- blocks outright with HTTP 403 and a
+        # plain-text "error code: 1010" body. That failure is easy to
+        # misdiagnose as a bad API key or a retired model, because it never
+        # reaches the provider's API to produce a real JSON error.
+        # Overridable so an alternative string can be tried without a code edit.
+        headers = {
+            "User-Agent": os.getenv(
+                "VERIRAG_USER_AGENT",
+                "VeriRAG/1.0 (+https://github.com/BitNinja11/VeriRAG)",
+            ),
+            **headers,
+        }
         request = urllib.request.Request(
             url, data=data, headers=headers, method="POST"
         )
