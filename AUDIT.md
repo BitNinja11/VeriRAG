@@ -459,3 +459,31 @@ failure is easy to misdiagnose as a bad key or a retired model. Combined with
 `VERIRAG_USER_AGENT` so an alternative can be tried without editing code.
 Verified with the same request minus/plus the header: 403/1010 without, a real
 API response with.
+
+## 19. Rate limits were retried for 0.4s when the provider asked for 4s
+
+With a working key and model, a Groq free-tier run still reported
+`llm 56%, rules-fallback 44%`. The cause was HTTP 429 on a tokens-per-minute
+cap (8,000 TPM). `complete_json` slept `0.4 * (attempt + 1)` -- 0.4s then 0.8s
+-- while the response body said *"Please try again in 4.035s"*. Every rate
+limit therefore burned three attempts in about a second and fell back to
+rules, so a transient, self-healing condition was converted into a permanent
+measurement loss.
+
+Retrying was also in the wrong place: `complete_json` wraps only the JSON
+stages, so the answer generator and the vanilla baseline -- which call
+`complete()` directly -- had no rate-limit handling at all.
+
+**Fix:**
+
+- `RateLimitError` carries the wait the provider actually asked for, taken
+  from the `Retry-After` header or parsed from the error body.
+- Rate-limit retries moved into `complete()`, so every caller benefits.
+- A transient 429 that later succeeds is not counted as a failure; one that
+  defeats the retry budget is counted and announced.
+- `VERIRAG_RATE_LIMIT_RETRIES` (default 6) and `VERIRAG_MIN_CALL_INTERVAL`
+  allow pacing a run under a token-per-minute cap without editing code.
+
+Verified with a stubbed dispatcher: a 429 quoting 1.59s is parsed as 1.59s,
+retried, and succeeds without incrementing `error_count`; an exhausted retry
+budget increments it and prints guidance.

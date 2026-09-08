@@ -32,6 +32,46 @@ class LLMError(RuntimeError):
     pass
 
 
+class RateLimitError(LLMError):
+    """HTTP 429. Carries the wait the provider actually asked for.
+
+    Distinguished from other failures because it is the one error worth
+    waiting out: the request was well-formed and will succeed shortly. Free
+    tiers are token-per-minute bound, so a 32-question run trips this
+    constantly, and a fixed sub-second backoff simply converts every rate
+    limit into a silent fall back to the deterministic path.
+    """
+
+    def __init__(self, message: str, retry_after: float = 5.0):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+def _parse_retry_after(headers, body: str) -> float:
+    """Seconds to wait, taken from the provider rather than guessed.
+
+    Prefers the Retry-After header; falls back to the delay quoted in the
+    error body ("Please try again in 1.59s"), which is what Groq returns.
+    """
+    raw = None
+    try:
+        raw = headers.get("Retry-After") if headers else None
+    except Exception:  # noqa: BLE001
+        raw = None
+    if raw:
+        try:
+            return max(0.5, float(raw))
+        except (TypeError, ValueError):
+            pass
+    match = re.search(r"try again in\s*([0-9.]+)\s*s", body, re.IGNORECASE)
+    if match:
+        try:
+            return max(0.5, float(match.group(1)))
+        except ValueError:
+            pass
+    return 5.0
+
+
 # --------------------------------------------------------------------------
 # JSON extraction
 # --------------------------------------------------------------------------
@@ -121,6 +161,13 @@ class LLMClient:
         self.error_count = 0
         self.last_error: str | None = None
         self._announced_error = False
+        self._announced_throttle = False
+        self.rate_limit_retries = int(os.getenv("VERIRAG_RATE_LIMIT_RETRIES", "6"))
+        # Optional proactive pacing. Free tiers cap tokens per minute, so
+        # spacing calls out is often faster end to end than sprinting into a
+        # 429 and waiting it off.
+        self.min_call_interval = float(os.getenv("VERIRAG_MIN_CALL_INTERVAL", "0"))
+        self._last_call_at = 0.0
 
         if self.provider != "offline":
             key_env = config.API_KEY_ENV.get(self.provider)
@@ -145,10 +192,47 @@ class LLMClient:
                 "their own deterministic logic."
             )
 
+        for attempt in range(self.rate_limit_retries + 1):
+            try:
+                return self._timed_dispatch(system, user)
+            except RateLimitError as exc:
+                if attempt >= self.rate_limit_retries:
+                    self.error_count += 1
+                    self.last_error = str(exc)[:300]
+                    if not self._announced_error:
+                        self._announced_error = True
+                        print(
+                            f"\n[!] {self.provider} still rate limited after "
+                            f"{self.rate_limit_retries} waits; falling back to "
+                            f"rules. Raise VERIRAG_RATE_LIMIT_RETRIES or set "
+                            f"VERIRAG_MIN_CALL_INTERVAL to pace the run.\n",
+                            file=sys.stderr,
+                        )
+                    raise
+                wait = exc.retry_after + 0.5 * (attempt + 1)
+                if not self._announced_throttle:
+                    self._announced_throttle = True
+                    print(
+                        f"\n[~] {self.provider} rate limit; waiting "
+                        f"{wait:.1f}s as instructed. Further waits are silent.\n",
+                        file=sys.stderr,
+                    )
+                time.sleep(wait)
+        raise LLMError("unreachable")
+
+    def _timed_dispatch(self, system: str, user: str) -> str:
+        if self.min_call_interval > 0:
+            gap = time.time() - self._last_call_at
+            if gap < self.min_call_interval:
+                time.sleep(self.min_call_interval - gap)
+        self._last_call_at = time.time()
         start = time.time()
         try:
             text = self._dispatch(system, user)
         except Exception as exc:
+            if isinstance(exc, RateLimitError):
+                # Counted only if it ultimately defeats the retry loop above.
+                raise
             self.error_count += 1
             self.last_error = str(exc)[:300]
             if not self._announced_error:
@@ -230,6 +314,11 @@ class LLMClient:
                 return json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             body = exc.read().decode("utf-8", errors="replace")[:400]
+            if exc.code == 429:
+                raise RateLimitError(
+                    f"HTTP 429 from {self.provider}: {body}",
+                    _parse_retry_after(exc.headers, body),
+                ) from exc
             raise LLMError(f"HTTP {exc.code} from {self.provider}: {body}") from exc
         except urllib.error.URLError as exc:
             raise LLMError(f"Network error calling {self.provider}: {exc}") from exc
