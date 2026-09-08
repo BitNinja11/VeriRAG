@@ -102,6 +102,22 @@ def recency_only_adjudicate(
     )
 
 
+def backend_mix(rows: list[dict[str, Any]]) -> dict[str, int]:
+    """Count which backend actually produced each extracted claim.
+
+    `rules` means the offline control ran by design. `rules-fallback` means a
+    real provider was configured and FAILED, so the deterministic path ran
+    instead. Those two look identical in the score table and mean opposite
+    things, which is exactly how a run with a dead API key can report a
+    perfect result.
+    """
+    mix: dict[str, int] = {}
+    for row in rows:
+        for backend, count in (row.get("_backends") or {}).items():
+            mix[backend] = mix.get(backend, 0) + count
+    return mix
+
+
 def run_system(system, questions, label: str) -> list[dict[str, Any]]:
     rows = []
     for i, item in enumerate(questions, 1):
@@ -111,6 +127,12 @@ def run_system(system, questions, label: str) -> list[dict[str, Any]]:
             result = {"answer": f"[error: {exc}]", "evidence": [], "citations": []}
         row = score_item(item, result, DISTRACTOR_VALUES)
         row["system"] = label
+        counts: dict[str, int] = {}
+        for ev in result.get("evidence", []) or []:
+            b = ev.get("extraction_backend")
+            if b:
+                counts[b] = counts.get(b, 0) + 1
+        row["_backends"] = counts
         rows.append(row)
         mark = "ok " if row["answer_correct"] else "MISS"
         print(f"  [{i:2}/{len(questions)}] {mark} {item['id']:12} {item['question'][:52]}")
@@ -336,7 +358,11 @@ def main() -> None:
                 AblatedVeriRAG(verirag, mode), questions, mode
             )
 
-    all_rows = [row for rows in results.values() for row in rows]
+    all_rows = [
+        {k: v for k, v in row.items() if not k.startswith("_")}
+        for rows in results.values()
+        for row in rows
+    ]
     write_csv(config.RESULTS_PATH, all_rows)
 
     # Stamp the backend condition onto every summary row. Retrieval results
@@ -350,10 +376,16 @@ def main() -> None:
         "model": client.model,
         "embedder_backend": verirag.embedder.backend,
         "reranker_backend": verirag.reranker.backend,
+        "provider_errors": client.error_count,
     }
     summary_rows = []
     for name, rows in results.items():
         agg = aggregate(rows)
+        mix = backend_mix(rows)
+        total = sum(mix.values()) or 1
+        agg["extraction_backend_mix"] = " ".join(
+            f"{b}={c / total:.0%}" for b, c in sorted(mix.items())
+        )
         summary_rows.append(
             {
                 "system": name,
@@ -362,6 +394,39 @@ def main() -> None:
             }
         )
     write_csv(config.RESULTS_SUMMARY_PATH, summary_rows)
+
+    print("\n" + "=" * 76)
+    print("BACKEND USAGE  (what actually produced the claims)")
+    print("=" * 76)
+    degraded = []
+    for name, rows in results.items():
+        mix = backend_mix(rows)
+        total = sum(mix.values())
+        if not total:
+            continue
+        parts = ", ".join(
+            f"{b} {c / total:.0%}" for b, c in sorted(mix.items())
+        )
+        print(f"  {name:16} {parts}")
+        fb = mix.get("rules-fallback", 0)
+        if fb:
+            degraded.append((name, fb / total))
+
+    if client.error_count:
+        print(f"\n  provider errors: {client.error_count}")
+        print(f"  first error    : {client.last_error}")
+
+    if degraded:
+        worst = max(rate for _, rate in degraded)
+        print("\n" + "!" * 76)
+        print("  PROVIDER FALLBACK DETECTED -- these are NOT clean LLM results.")
+        for name, rate in degraded:
+            print(f"    {name:16} {rate:.0%} of claims came from deterministic rules")
+        if worst >= 0.5:
+            print("\n  More than half the agent stages never reached the model.")
+            print("  This run measured the RULE-BASED CONTROL, not the provider.")
+            print("  Do not report these numbers as a provider result.")
+        print("!" * 76)
 
     print_summary(results)
     print(f"Per-question results -> {config.RESULTS_PATH}")

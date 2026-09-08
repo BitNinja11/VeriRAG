@@ -403,3 +403,39 @@ states this as an open experiment rather than implying it was tested.
 Repository flattened from `verirag_fixed_final/verirag/` to the root; added
 `LICENSE`, `pyproject.toml`, `.gitignore`, and a GitHub Actions workflow that
 runs the regression suite and the offline benchmark on core dependencies only.
+
+## 17. A run in which every provider call failed reported a perfect score
+
+Discovered while running the benchmark against Groq for the first time.
+
+Every agent wraps its provider call in `except Exception` and falls back to its
+deterministic path, so one malformed response cannot kill a 32-question run.
+That resilience hid a total outage. With every single call failing:
+
+- VeriRAG fell back to rules at every stage and scored **1.000** -- identical to
+  the offline control, and indistinguishable from it in the output;
+- the vanilla baseline, which has no deterministic fallback once a provider is
+  set, returned `[generation failed: ...]` and scored **0.000**;
+- the only visible symptom was `Mean LLM calls/query = 19`, which is
+  `5 extract x 3 retries + 1 detect x 3 retries + 1 generate` -- every JSON
+  stage exhausting `complete_json`'s retry budget.
+
+Nothing in the summary table said the model had never answered. A reader would
+have reported "benchmarked Llama-3.3-70B" on the strength of a run that never
+reached the provider.
+
+**Fix:**
+
+- `LLMClient` counts provider failures and prints the first one immediately
+  (once, not per call, so a dead key does not bury the output).
+- The evaluator reports a backend mix per system, distinguishing `rules`
+  (offline control, by design) from `rules-fallback` (provider configured and
+  failed) -- two states that score identically and mean opposite things.
+- A fallback rate above 50% triggers an explicit refusal banner: *"This run
+  measured the RULE-BASED CONTROL, not the provider."*
+- `summary.csv` records `provider_errors` and `extraction_backend_mix`.
+
+The general lesson is the one this audit keeps rediscovering: a fallback that
+silently substitutes a different system is a measurement hazard, not just a
+robustness feature. See also §11, where a BM25 "drop-in fallback" silently
+changed a published ablation number.

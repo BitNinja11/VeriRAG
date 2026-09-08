@@ -21,6 +21,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import time
 from typing import Any
 
@@ -111,6 +112,15 @@ class LLMClient:
         )
         self.call_count = 0
         self.total_latency = 0.0
+        # Provider failures are swallowed by every agent so one bad response
+        # cannot kill a 32-question run. That resilience hid a total outage:
+        # a run in which EVERY call failed still produced a clean 1.000 table,
+        # because each agent quietly fell back to its deterministic path.
+        # Counting failures here, and surfacing the first one immediately, is
+        # what makes "the model never answered" visible instead of invisible.
+        self.error_count = 0
+        self.last_error: str | None = None
+        self._announced_error = False
 
         if self.provider != "offline":
             key_env = config.API_KEY_ENV.get(self.provider)
@@ -138,6 +148,20 @@ class LLMClient:
         start = time.time()
         try:
             text = self._dispatch(system, user)
+        except Exception as exc:
+            self.error_count += 1
+            self.last_error = str(exc)[:300]
+            if not self._announced_error:
+                # Print once, not per call: a dead API key would otherwise
+                # emit hundreds of identical lines and bury the run output.
+                self._announced_error = True
+                print(
+                    f"\n[!] {self.provider} call failed: {self.last_error}\n"
+                    f"[!] Agents will fall back to deterministic rules. "
+                    f"Further errors are counted, not printed.\n",
+                    file=sys.stderr,
+                )
+            raise
         finally:
             self.total_latency += time.time() - start
             self.call_count += 1
