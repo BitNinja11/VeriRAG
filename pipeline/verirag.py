@@ -5,10 +5,9 @@ Flow:
     retrieve (hybrid) -> rerank -> extract evidence -> detect conflict
          -> [conditional] adjudicate -> generate
 
-The conditional edge is the architecturally interesting part: the adjudicator
-executes only when a genuine CONTRADICTION exists, so clean questions cost one
-fewer LLM call. `adjudicator_invoked` is recorded per query so the evaluation
-can report how often the expensive path actually fires.
+The adjudicator executes only when a CONTRADICTION exists, so questions whose
+sources agree cost one fewer model call. `adjudicator_invoked` is recorded per
+query so the evaluation can report how often that path fires.
 
 This is implemented as an explicit state machine rather than with LangGraph.
 The graph has six nodes and one branch; hand-rolling it keeps the dependency
@@ -162,7 +161,7 @@ class VeriRAG:
             if self.verbose:
                 print(f"  [{name}] {state.stage_timings[name]:.3f}s")
 
-        # Conditional edge: the whole point of the architecture.
+        # Conditional edge: adjudicate only when a contradiction exists.
         if has_real_conflict(state.conflicts):
             t0 = time.time()
             self._node_adjudicate(state)

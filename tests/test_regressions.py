@@ -67,6 +67,24 @@ class EvidenceExtractionRegressionTests(unittest.TestCase):
         self.assertEqual(result["value"], "14 characters")
         self.assertEqual(result["numeric_value"], 14.0)
 
+    def test_intern_entitlement_beats_eligibility_window(self):
+        # The eligibility window ("six months") precedes the entitlement
+        # ("12 days"), so taking the first quantity by position is wrong.
+        # The benchmark still scored this correct because the generated answer
+        # quotes the whole sentence, which hid the bad structured value.
+        text = (
+            "Interns engaged for a period of six months or less are entitled "
+            "to 12 days of paid leave, prorated by duration of engagement."
+        )
+        result = deterministic_extract(
+            "How many paid leave days are interns entitled to?",
+            text,
+            {"title": "Annual Leave Policy 2026", "source_type": "official_policy"},
+        )
+        self.assertEqual(result["property"], "intern_leave_days")
+        self.assertEqual(result["value"], "12 days")
+        self.assertEqual(result["numeric_value"], 12.0)
+
     def test_categorical_schedule_answer_is_supported(self):
         result = deterministic_extract(
             "On which day is building maintenance scheduled?",
@@ -144,7 +162,7 @@ class AdjudicationRegressionTests(unittest.TestCase):
 
     def test_equivalent_range_formats_and_scope_spelling_support_each_other(self):
         left = self._evidence(0, "policy_a", "3 to 5 business days")
-        right = self._evidence(1, "policy_b", "3–5 business days")
+        right = self._evidence(1, "policy_b", "3-5 business days")
         left.scope = "full-time employees"
         right.scope = "full time employees"
         relations = deterministic_detect([left, right])

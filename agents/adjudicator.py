@@ -1,21 +1,19 @@
-"""Agent 3 — Adjudicator.
+"""Agent 3 - Adjudicator.
 
-Runs ONLY when the Conflict Detector found a genuine CONTRADICTION. That
-conditional routing is a real design decision, not decoration: on a clean
-question the adjudicator call is skipped entirely, which removes an LLM call
-from the critical path.
+Runs only when the Conflict Detector found a CONTRADICTION. On a question
+whose sources agree, this stage is skipped entirely, which removes one model
+call from the critical path.
 
-The adjudication priority order is deliberately NOT "newest wins":
+The adjudication priority order is not "newest wins":
 
   1. Trusted supersession    same/higher-authority source replaces another
   2. Source authority        official policy > handbook > FAQ > blog
   3. Recency                 tie-break among comparably authoritative sources
   4. Relevance               how directly the claim answers the question
 
-Recency sits third on purpose. The benchmark contains a marketing blog that is
-the NEWEST document in the corpus and also factually wrong. Any system that
-ranks by date alone fails those items, and the ablation study reports exactly
-that failure.
+Recency is third rather than first because the benchmark corpus contains a
+marketing blog that is both the newest document and factually wrong. Ranking
+by date alone fails those items; the ablation study measures that failure.
 """
 
 from __future__ import annotations
@@ -34,13 +32,13 @@ SYSTEM_PROMPT = """You are an evidence adjudicator.
 The retrieved sources contain contradictory claims. Select which claim should
 be treated as authoritative, using this priority order:
 
-1. Trusted explicit supersession — a source that states it replaces or
+1. Trusted explicit supersession - a source that states it replaces or
    supersedes an earlier version outranks that version only when the
    superseding source is at least as authoritative as the source it replaces.
    A lower-authority blog cannot self-declare that it supersedes policy.
-2. Source authority — an official policy or regulation outranks a handbook,
+2. Source authority - an official policy or regulation outranks a handbook,
    which outranks an FAQ, which outranks a blog or marketing page.
-3. Effective date and recency — used to break ties between sources of
+3. Effective date and recency - used to break ties between sources of
    comparable authority.
 4. Direct relevance and specificity with respect to the question.
 

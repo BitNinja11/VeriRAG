@@ -1,9 +1,9 @@
 """Evaluation metrics.
 
-Kept deliberately simple and string-based rather than using an LLM judge. An
-LLM judge on a 32-item benchmark introduces a second source of error that is
-harder to audit than the thing being measured, and the answers here are short
-factual values where substring matching is reliable.
+Scoring is string-based rather than using an LLM judge. On a 32-item benchmark
+an LLM judge introduces a second source of error that is harder to audit than
+the thing being measured, and the expected answers are short factual values
+where numeric-aware matching is reliable.
 
 Metrics:
   answer_correct      the expected value appears in the answer

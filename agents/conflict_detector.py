@@ -1,4 +1,4 @@
-"""Agent 2 — Conflict Detector.
+"""Agent 2 - Conflict Detector.
 
 Classifies every pair of supporting claims into one of four relations:
 
@@ -75,7 +75,7 @@ VALID = {"SUPPORT", "CONTRADICTION", "DIFFERENT_SCOPE", "IRRELEVANT"}
 def _normalise_value(value: str) -> str:
     """Normalise harmless formatting differences in extracted values."""
     text = (value or "").strip().lower()
-    # Canonicalise common range surfaces: 3-5, 3–5, between 3 and 5.
+    # Canonicalise common range surfaces: 3-5, 3-5, between 3 and 5.
     text = re.sub(
         r"\bbetween\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)",
         r"\1 to \2",

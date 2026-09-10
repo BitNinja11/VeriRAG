@@ -23,13 +23,13 @@ from visualization.evidence_graph import (  # noqa: E402
     render_matplotlib,
 )
 
-st.set_page_config(page_title="VeriRAG", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="VeriRAG", layout="wide")
 
-RELATION_STYLE = {
-    "CONTRADICTION": ("🔴", "Contradiction"),
-    "SUPPORT": ("🟢", "Support"),
-    "DIFFERENT_SCOPE": ("🟡", "Different scope"),
-    "IRRELEVANT": ("⚪", "Irrelevant"),
+RELATION_LABELS = {
+    "CONTRADICTION": "Contradiction",
+    "SUPPORT": "Support",
+    "DIFFERENT_SCOPE": "Different scope",
+    "IRRELEVANT": "Irrelevant",
 }
 
 EXAMPLES = [
@@ -86,7 +86,7 @@ def main() -> None:
     with st.sidebar:
         st.divider()
         st.caption(
-            f"**Corpus** {len(system.documents)} docs → {len(system.chunks)} chunks  \n"
+            f"**Corpus** {len(system.documents)} docs -> {len(system.chunks)} chunks  \n"
             f"**Embedder** `{system.embedder.backend}`  \n"
             f"**Reranker** `{system.reranker.backend}`  \n"
             f"**Model** `{client.model}`"
@@ -95,8 +95,7 @@ def main() -> None:
             st.warning(
                 "sentence-transformers unavailable; using TF-IDF+SVD. "
                 "Treat results as a separate degraded-backend condition; "
-                "they are not a guaranteed lower bound on transformer retrieval.",
-                icon="⚠️",
+                "they are not a guaranteed lower bound on transformer retrieval."
             )
 
     st.subheader("Ask a question")
@@ -123,7 +122,7 @@ def main() -> None:
         st.warning("Sources disagreed. The answer below reflects adjudication.")
     st.markdown(f"**{state.answer}**")
     if state.citations:
-        st.caption("Cited: " + " · ".join(state.citations))
+        st.caption("Cited: " + " | ".join(state.citations))
 
     if state.adjudication is not None:
         st.subheader("Adjudication")
@@ -133,7 +132,7 @@ def main() -> None:
                 f"{state.adjudication.criterion.replace('_', ' ')}**"
             )
         else:
-            st.error("Unresolved — the system abstained rather than guess.")
+            st.error("Unresolved - the system abstained rather than guess.")
         st.write(state.adjudication.reason)
 
     st.subheader("Extracted claims")
@@ -149,16 +148,16 @@ def main() -> None:
             state.adjudication is not None
             and state.adjudication.selected_claim_id == ev.claim_id
         )
-        icon = "✅" if selected else ("📄" if ev.supports_question else "➖")
+        marker = "SELECTED" if selected else ("supporting" if ev.supports_question else "unused")
         with st.expander(
-            f"{icon} [{ev.claim_id}] {ev.source} — {ev.value or 'no value'}"
-            f"  ·  score {scores.get(ev.claim_id, 0):.3f}",
+            f"[{ev.claim_id}] {ev.source} | {ev.value or 'no value'} | {marker}"
+            f"  |  score {scores.get(ev.claim_id, 0):.3f}",
             expanded=selected,
         ):
             left, right = st.columns([2, 1])
             left.write(ev.claim)
             if ev.quote:
-                left.caption(f"Quote: “{ev.quote}”")
+                left.caption(f'Quote: "{ev.quote}"')
             right.write(
                 f"**Type** {ev.source_type}  \n"
                 f"**Date** {ev.date or 'n/a'}  \n"
@@ -171,8 +170,8 @@ def main() -> None:
     if relations:
         st.subheader("Claim relationships")
         for rel in relations:
-            icon, name = RELATION_STYLE.get(rel.relationship, ("⚪", rel.relationship))
-            st.write(f"{icon} **{rel.claim_ids}** {name} — {rel.reason}")
+            name = RELATION_LABELS.get(rel.relationship, rel.relationship)
+            st.write(f"**{rel.claim_ids}** {name}: {rel.reason}")
 
     if show_graph:
         st.subheader("Evidence graph")
@@ -181,8 +180,8 @@ def main() -> None:
         )
         summary = graph_summary(graph)
         st.caption(
-            f"{summary['nodes']} nodes · {summary['edges']} edges · "
-            f"{summary['contradictions']} contradictions · "
+            f"{summary['nodes']} nodes | {summary['edges']} edges | "
+            f"{summary['contradictions']} contradictions | "
             f"{summary['different_scope']} scope separations"
         )
         st.pyplot(render_matplotlib(graph))

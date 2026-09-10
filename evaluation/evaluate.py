@@ -318,14 +318,14 @@ def main() -> None:
     )
     if verirag.embedder.is_degraded or verirag.reranker.is_degraded:
         print(
-            "\n  " + "!" * 68 + "\n"
-            "  WARNING: transformer backends unavailable; running degraded\n"
-            "  (embedder=%s, reranker=%s).\n"
-            "  Results from this configuration are NOT comparable to a run\n"
-            "  with sentence-transformers installed. The backend condition is\n"
-            "  recorded in summary.csv -- report it alongside any number.\n"
-            "  " % (verirag.embedder.backend, verirag.reranker.backend)
-            + "!" * 68
+            "\n  WARNING: transformer backends unavailable "
+            f"(embedder={verirag.embedder.backend}, "
+            f"reranker={verirag.reranker.backend}).\n"
+            "  This is a separate backend condition, not a lower bound. "
+            "Results are not\n"
+            "  comparable to a run with sentence-transformers installed; the "
+            "condition is\n"
+            "  recorded in summary.csv and should be reported with any number.\n"
         )
 
     vanilla = VanillaRAG(verirag.retriever, client)
@@ -418,15 +418,16 @@ def main() -> None:
 
     if degraded:
         worst = max(rate for _, rate in degraded)
-        print("\n" + "!" * 76)
-        print("  PROVIDER FALLBACK DETECTED -- these are NOT clean LLM results.")
+        print("\n  WARNING: provider fallback detected. These are not clean "
+              "LLM results.")
         for name, rate in degraded:
             print(f"    {name:16} {rate:.0%} of claims came from deterministic rules")
         if worst >= 0.5:
-            print("\n  More than half the agent stages never reached the model.")
-            print("  This run measured the RULE-BASED CONTROL, not the provider.")
-            print("  Do not report these numbers as a provider result.")
-        print("!" * 76)
+            print(
+                "\n  Over half the agent stages never reached the model, so this "
+                "run\n  measured the rule-based control rather than the provider. "
+                "Do not\n  report these numbers as a provider result."
+            )
 
     print_summary(results)
     print(f"Per-question results -> {config.RESULTS_PATH}")

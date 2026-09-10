@@ -1,9 +1,8 @@
 """Final answer generation.
 
-Receives verified evidence plus the adjudication outcome — deliberately NOT
-the raw retrieved chunks. Filtering before generation is the point: the
-generator should never see the claim the adjudicator rejected as its primary
-context, or it will hedge between them.
+Receives verified evidence plus the adjudication outcome rather than the raw
+retrieved chunks. If the rejected claim were still in the primary context, the
+generator would hedge between it and the selected one.
 """
 
 from __future__ import annotations
@@ -304,7 +303,7 @@ def vanilla_generate(client: LLMClient, question: str, chunks: list) -> str:
             for sentence in sentences:
                 tokens = _baseline_tokens(sentence)
                 lexical = len(q_tokens & tokens) / max(1, len(q_tokens))
-                # Generic answer-shape bonus. This is deliberately NOT tied to
+                # Generic answer-shape bonus, not tied to
                 # VeriRAG's property ontology: a fair extractive baseline
                 # should prefer a sentence that contains an answer-shaped
                 # value over a heading that merely repeats query keywords.

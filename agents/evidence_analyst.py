@@ -1,4 +1,4 @@
-"""Agent 1 — Evidence Analyst.
+"""Agent 1 - Evidence Analyst.
 
 Converts one retrieved passage into a structured claim. Running this per
 passage (rather than dumping all passages into the generator) is what makes
@@ -354,9 +354,27 @@ def _best_sentence(question: str, text: str) -> tuple[str, float]:
     return best, min(1.0, best_score)
 
 
+# Properties whose answer is always a day count, even when an earlier quantity
+# in the same sentence uses a different unit. "Interns engaged for a period of
+# six months or less are entitled to 12 days of paid leave" puts the
+# eligibility window before the entitlement, so position alone picks the wrong
+# number; "Passwords must be at least 14 characters and rotated every 180 days"
+# has the same shape with characters first.
+_DAY_VALUED_PROPERTIES = {
+    "password_rotation_days",
+    "intern_leave_days",
+    "leave_carry_forward_days",
+    "notice_period_days",
+    "expense_submission_days",
+    "access_revocation_days",
+    "visitor_registration_days",
+    "leave_approval_days",
+}
+
+
 def _extract_value(sentence: str, prop: str) -> tuple[str, float | None]:
     """Extract the value that corresponds to `prop`, not merely the first number."""
-    # Preserve ranges as ranges so 3–5 and 5–7 remain distinguishable.
+    # Preserve ranges as ranges so 3-5 and 5-7 remain distinguishable.
     range_value = _find_range(sentence)
     if range_value:
         _, _, _, display = range_value
@@ -391,11 +409,9 @@ def _extract_value(sentence: str, prop: str) -> tuple[str, float | None]:
         filtered = [c for c in candidates if c[2] in desired_units]
         if filtered:
             candidates = filtered
-    elif prop == "password_rotation_days":
+    elif prop in _DAY_VALUED_PROPERTIES:
         filtered = [c for c in candidates if c[2] == "day"]
         if filtered:
-            # In the canonical compound password sentence the rotation period
-            # is the day-valued quantity, while the length is in characters.
             candidates = filtered
 
     if not candidates:

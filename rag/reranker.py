@@ -3,8 +3,8 @@
 The retriever is a bi-encoder: query and chunk are embedded independently, so
 their representations never interact. A cross-encoder feeds (query, chunk) as
 a single joined input, letting attention run across both. That is far more
-accurate per pair and far more expensive, which is exactly why it runs on ~10
-candidates rather than the whole corpus.
+accurate per pair and far more expensive, so it runs on ~10 candidates rather
+than the whole corpus.
 
 Fallback (no torch / no network): a lexical relevance score combining query
 term coverage and IDF-lite weighting. Clearly weaker; kept so the pipeline

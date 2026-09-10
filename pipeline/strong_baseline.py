@@ -4,12 +4,12 @@ This is the baseline the architecture actually has to beat, and the question a
 reviewer asks first: "why not just hand five passages plus their metadata to a
 capable model and tell it to prefer authoritative sources?"
 
-It is deliberately generous to the baseline. It gets the SAME hybrid retrieval
-and the SAME reranked top-k as the full pipeline, it sees every passage's
-source_type, date and authority_note, and its prompt spells out the same
-priority order the adjudicator implements. The only thing it does not get is
-the staged machinery: no per-passage claim extraction, no pairwise relation
-typing, no separate adjudication step, no evidence graph.
+The baseline is given every advantage the full pipeline has except the staged
+machinery: the same hybrid retrieval, the same reranked top-k, every passage's
+source_type, date and authority_note, and a prompt spelling out the same
+priority order the adjudicator implements. It has no per-passage claim
+extraction, no pairwise relation typing, no separate adjudication step and no
+evidence graph.
 
 So the comparison isolates exactly one variable -- whether decomposing conflict
 resolution into explicit stages beats asking one strong model to do all of it

@@ -2,7 +2,7 @@
 
 Uses FAISS IndexFlatIP when available. Vectors are L2-normalised upstream, so
 inner product is cosine similarity. Falls back to a plain numpy matmul, which
-is identical in result and perfectly adequate at this corpus size — FAISS
+is identical in result and perfectly adequate at this corpus size - FAISS
 matters at 10^6 vectors, not 10^2.
 """
 

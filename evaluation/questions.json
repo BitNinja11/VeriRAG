@@ -182,7 +182,7 @@
       "id": "outdated-04",
       "category": "outdated",
       "question": "How many days does refund processing take?",
-      "expected_answer_any": ["3 to 5 business days", "3-5 business days", "3–5 business days", "between 3 and 5 business days"],
+      "expected_answer_any": ["3 to 5 business days", "3-5 business days", "3-5 business days", "between 3 and 5 business days"],
       "expected_conflict": true,
       "gold_sources": ["refund_policy_2026"],
       "distractor_sources": ["refund_policy_2024"],

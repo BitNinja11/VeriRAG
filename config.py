@@ -7,6 +7,27 @@ point at a single file. Values are overridable via environment variables.
 
 import os
 
+# Load a .env file if present. Written by hand rather than pulling in
+# python-dotenv: the format needed here is flat KEY=value, and an extra
+# dependency for twelve lines is a poor trade.
+def _load_env_file(path: str = ".env") -> None:
+    try:
+        with open(path, encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                key, value = key.strip(), value.strip().strip("\"'")
+                # Real environment variables win, so an export always
+                # overrides the file rather than the other way round.
+                os.environ.setdefault(key, value)
+    except OSError:
+        pass
+
+
+_load_env_file()
+
 # --------------------------------------------------------------------------
 # LLM provider
 # --------------------------------------------------------------------------
@@ -18,7 +39,7 @@ LLM_PROVIDER = os.getenv("VERIRAG_LLM_PROVIDER", "offline").lower()
 
 # Model names per provider. Free-tier friendly defaults.
 LLM_MODELS = {
-    "groq": os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+    "groq": os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
     "gemini": os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
     "openai": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
     "anthropic": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-5"),
