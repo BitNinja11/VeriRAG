@@ -1,0 +1,19 @@
+# Core -- required. The offline benchmark and the test suite run on these alone.
+numpy>=1.24
+scikit-learn>=1.3
+rank-bm25>=0.2.2
+
+# Retrieval backends. Without sentence-transformers the embedder falls back to
+# TF-IDF+SVD and the reranker to lexical scoring. That fallback is a SEPARATE
+# BACKEND CONDITION, not a lower bound -- the evaluator prints a warning and
+# stamps the active backend into summary.csv. Install these to reproduce the
+# headline table.
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+
+# Visualisation and demo UI
+networkx>=3.0
+matplotlib>=3.7
+streamlit>=1.30
+
+# No LLM SDK required: agents/llm.py calls provider REST APIs via urllib.

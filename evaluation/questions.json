@@ -1,0 +1,304 @@
+{
+  "description": "VeriRAG benchmark. 32 questions over the Northwind corpus, split across four evidence conditions. Ground truth is derived from the corpus metadata and supersession statements, not from outside knowledge.",
+  "categories": {
+    "clean": "Sources agree, or only one source addresses the question. No conflict should be reported.",
+    "contradictory": "Sources disagree and the correct source is decided by AUTHORITY, not recency. The marketing blog is the newest document in the corpus and is factually wrong, so a recency-only policy fails these.",
+    "outdated": "Sources disagree and the correct source is decided by RECENCY plus explicit supersession.",
+    "noisy": "The corpus contains distractor passages. Some questions are unanswerable from the corpus and the system should abstain rather than fabricate."
+  },
+  "questions": [
+    {
+      "id": "clean-01",
+      "category": "clean",
+      "question": "How many paid leave days are interns entitled to?",
+      "expected_answer_any": ["12 day", "12 days"],
+      "expected_conflict": false,
+      "gold_sources": ["leave_policy_2026", "leave_policy_2023"],
+      "note": "Both policies state 12; unchanged across versions."
+    },
+    {
+      "id": "clean-02",
+      "category": "clean",
+      "question": "What is the minimum password length?",
+      "expected_answer_any": ["14 character", "14 characters"],
+      "expected_conflict": false,
+      "gold_sources": ["security_policy_2026"]
+    },
+    {
+      "id": "clean-03",
+      "category": "clean",
+      "question": "How often must passwords be rotated?",
+      "expected_answer_any": ["180 day", "180 days"],
+      "expected_conflict": false,
+      "gold_sources": ["security_policy_2026"]
+    },
+    {
+      "id": "clean-04",
+      "category": "clean",
+      "question": "Within how many hours must a suspected security incident be reported?",
+      "expected_answer_any": ["4 hour", "4 hours"],
+      "expected_conflict": false,
+      "gold_sources": ["security_policy_2026"]
+    },
+    {
+      "id": "clean-05",
+      "category": "clean",
+      "question": "After how many days of no use is production access automatically revoked?",
+      "expected_answer_any": ["90 day", "90 days"],
+      "expected_conflict": false,
+      "gold_sources": ["security_policy_2026"]
+    },
+    {
+      "id": "clean-06",
+      "category": "clean",
+      "question": "How many days in advance must leave be approved by a manager?",
+      "expected_answer_any": ["7 day", "7 working days"],
+      "expected_conflict": false,
+      "gold_sources": ["leave_policy_2026", "leave_policy_2023"]
+    },
+    {
+      "id": "clean-07",
+      "category": "clean",
+      "question": "How many days per month may employees work remotely?",
+      "expected_answer_any": ["8 day", "8 days"],
+      "expected_conflict": false,
+      "gold_sources": ["employee_handbook"]
+    },
+    {
+      "id": "clean-08",
+      "category": "clean",
+      "question": "Within how many days must business expenses be submitted?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": false,
+      "gold_sources": ["employee_handbook"]
+    },
+
+    {
+      "id": "contra-01",
+      "category": "contradictory",
+      "question": "How many paid annual leave days do full-time employees get?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["company_blog_2026", "hr_faq"],
+      "note": "Blog claims 35 and is the NEWEST document. Recency-only adjudication fails here."
+    },
+    {
+      "id": "contra-02",
+      "category": "contradictory",
+      "question": "What is the refund window for a software licence?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["company_blog_2026"],
+      "note": "Blog claims 90 and is newer than the 2026 policy."
+    },
+    {
+      "id": "contra-03",
+      "category": "contradictory",
+      "question": "How much annual leave does the company offer its people?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["company_blog_2026"],
+      "note": "Phrased in the blog's marketing register to bias retrieval toward it."
+    },
+    {
+      "id": "contra-04",
+      "category": "contradictory",
+      "question": "How long do customers have to request a refund on a licence?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["company_blog_2026"]
+    },
+    {
+      "id": "contra-05",
+      "category": "contradictory",
+      "question": "What is the paid annual leave entitlement according to company policy?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["hr_faq", "leave_policy_2023"]
+    },
+    {
+      "id": "contra-06",
+      "category": "contradictory",
+      "question": "How many days of annual leave is a full-time staff member given each year?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["hr_faq"]
+    },
+    {
+      "id": "contra-07",
+      "category": "contradictory",
+      "question": "What refund period applies to a standard licence purchase?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["refund_policy_2024", "company_blog_2026"]
+    },
+    {
+      "id": "contra-08",
+      "category": "contradictory",
+      "question": "How many leave days does an employee accrue per month?",
+      "expected_answer_any": ["2 day", "2 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["leave_policy_2023"],
+      "note": "2023 says 1.5 per month, 2026 says 2 per month."
+    },
+
+    {
+      "id": "outdated-01",
+      "category": "outdated",
+      "question": "How many unused leave days can be carried forward to the next year?",
+      "expected_answer_any": ["10 day", "10 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["leave_policy_2023", "hr_faq"],
+      "note": "2023 and the FAQ say 5; the 2026 policy raises it to 10."
+    },
+    {
+      "id": "outdated-02",
+      "category": "outdated",
+      "question": "What is the current annual leave entitlement for full-time staff?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["leave_policy_2023"]
+    },
+    {
+      "id": "outdated-03",
+      "category": "outdated",
+      "question": "What is the current refund window in days?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["refund_policy_2024"]
+    },
+    {
+      "id": "outdated-04",
+      "category": "outdated",
+      "question": "How many days does refund processing take?",
+      "expected_answer_any": ["3 to 5 business days", "3-5 business days", "3-5 business days", "between 3 and 5 business days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["refund_policy_2024"],
+      "note": "2024 says 5-7 business days; 2026 says 3-5."
+    },
+    {
+      "id": "outdated-05",
+      "category": "outdated",
+      "question": "How many leave days can I carry over at the end of December?",
+      "expected_answer_any": ["10 day", "10 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["hr_faq"]
+    },
+    {
+      "id": "outdated-06",
+      "category": "outdated",
+      "question": "According to the latest policy, how much paid annual leave is granted?",
+      "expected_answer_any": ["24 day", "24 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["leave_policy_2023", "hr_faq"]
+    },
+    {
+      "id": "outdated-07",
+      "category": "outdated",
+      "question": "What is the maximum number of leave days carried into the following calendar year?",
+      "expected_answer_any": ["10 day", "10 days"],
+      "expected_conflict": true,
+      "gold_sources": ["leave_policy_2026"],
+      "distractor_sources": ["leave_policy_2023"]
+    },
+    {
+      "id": "outdated-08",
+      "category": "outdated",
+      "question": "How long is the refund window for a licence bought today?",
+      "expected_answer_any": ["30 day", "30 days"],
+      "expected_conflict": true,
+      "gold_sources": ["refund_policy_2026"],
+      "distractor_sources": ["refund_policy_2024", "company_blog_2026"]
+    },
+
+    {
+      "id": "noisy-01",
+      "category": "noisy",
+      "question": "What is the parking waiting list length?",
+      "expected_answer_any": ["three week", "3 week"],
+      "expected_conflict": false,
+      "gold_sources": ["facilities_notice"],
+      "note": "Answerable but from an unrelated document; retrieval must not drift to HR policies."
+    },
+    {
+      "id": "noisy-02",
+      "category": "noisy",
+      "question": "How far in advance must visitors be registered?",
+      "expected_answer_any": ["one day", "1 day"],
+      "expected_conflict": false,
+      "gold_sources": ["facilities_notice"]
+    },
+    {
+      "id": "noisy-03",
+      "category": "noisy",
+      "question": "What is the company's parental leave entitlement?",
+      "expected_answer_any": [],
+      "expected_conflict": false,
+      "expect_abstain": true,
+      "gold_sources": [],
+      "note": "Unanswerable. Lexically close to leave policies, so a naive system will confabulate an annual-leave number."
+    },
+    {
+      "id": "noisy-04",
+      "category": "noisy",
+      "question": "How many sick days are employees entitled to?",
+      "expected_answer_any": [],
+      "expected_conflict": false,
+      "expect_abstain": true,
+      "gold_sources": [],
+      "note": "Unanswerable. The corpus covers annual leave only."
+    },
+    {
+      "id": "noisy-05",
+      "category": "noisy",
+      "question": "What is the annual bonus percentage?",
+      "expected_answer_any": [],
+      "expected_conflict": false,
+      "expect_abstain": true,
+      "gold_sources": [],
+      "note": "Unanswerable."
+    },
+    {
+      "id": "noisy-06",
+      "category": "noisy",
+      "question": "On which day is building maintenance scheduled?",
+      "expected_answer_any": ["first saturday", "saturday"],
+      "expected_conflict": false,
+      "gold_sources": ["facilities_notice"]
+    },
+    {
+      "id": "noisy-07",
+      "category": "noisy",
+      "question": "What is the notice period for resignation?",
+      "expected_answer_any": [],
+      "expected_conflict": false,
+      "expect_abstain": true,
+      "gold_sources": [],
+      "note": "Unanswerable."
+    },
+    {
+      "id": "noisy-08",
+      "category": "noisy",
+      "question": "How many days of study leave are available?",
+      "expected_answer_any": [],
+      "expected_conflict": false,
+      "expect_abstain": true,
+      "gold_sources": [],
+      "note": "Unanswerable. Strong lexical overlap with leave policy makes this the hardest abstention case."
+    }
+  ]
+}

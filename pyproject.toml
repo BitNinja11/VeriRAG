@@ -1,0 +1,20 @@
+[project]
+name = "verirag"
+version = "1.0.0"
+description = "Conflict-aware retrieval-augmented generation with evidence adjudication"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Kris Das Angustias Pereira" }]
+dependencies = [
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+    "rank-bm25>=0.2.2",
+]
+
+[project.optional-dependencies]
+transformers = ["sentence-transformers>=2.2.0", "faiss-cpu>=1.7.4"]
+ui = ["streamlit>=1.30", "networkx>=3.0", "matplotlib>=3.7"]
+
+[tool.setuptools]
+packages = ["agents", "rag", "pipeline", "evaluation", "visualization"]
